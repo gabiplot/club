@@ -1,0 +1,93 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_top_nav_menu %}
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+            {% block sonata_top_nav_menu_add_block %}
+                {% set addBlock = include(get_global_template('add_block')) %}
+                {% if addBlock|trim is not empty %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fas fa-plus-square fa-fw" aria-hidden="true"></i> <i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        {{ addBlock|raw }}
+                    </li>
+                {% endif %}
+            {% endblock %}
+            {% if app.user %}
+                {% block sonata_top_nav_menu_user_block %}
+                    <li class="dropdown user-menu">
+                        <a class="dropdown-toggle">
+                            <b>{{ app.user.email|upper}}</b>
+                        </a>
+                    </li>
+                    <li class="dropdown user-menu">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#">
+                            <i class="fa fa-user fa-fw" aria-hidden="true"> <b>{{ app.user.email | upper }}</b></i>
+                            </a>
+                        </li>
+                        <li><a href="{{ path('admin_logout') }}">
+                            <i class="fa fa-sign-out fa-fw" aria-hidden="true"> Salir</i>
+                            </a>
+                        </li>
+                        </ul>
+                    </li>
+                {% endblock %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+
+{#% block sonata_top_nav_menu %}    
+     {% if app.user and is_granted('ROLE_USER') %}
+         <div class="navbar-custom-menu">
+             <ul class="nav navbar-nav">
+           
+                 {% block sonata_top_nav_menu_add_block %}
+
+                    {% set alerta_notificacion = app.user.getAlerta() %}
+
+                    {% if (alerta_notificacion > 0) %}
+                     <li class="">
+                         <a class="" data-toggle="" href="#">
+                             <i class="fa fa-bell" aria-hidden="true"></i>&nbsp<span class="badge alert-danger">{{alerta_notificacion}}</span>
+                         </a>
+                         {% include sonata_admin.adminPool.getTemplate('add_block') %}
+                     </li>                 
+                     {% endif %}   
+                                       
+                     <li class="dropdown">
+                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             <i class="fa fa-plus-square fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                         </a>
+                         {% include sonata_admin.adminPool.getTemplate('add_block') %}
+                     </li>
+                 {% endblock %}
+                 {% block sonata_top_nav_menu_user_block %}
+                     <li class="dropdown user-menu">
+                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             <i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                         </a>
+                         <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#">
+                                <i class="fa fa-user fa-fw" aria-hidden="true"> <b>{{ app.user.email | upper }}</b></i>
+                                </a>
+                            </li>
+                            <li><a href="{{ path('admin_logout') }}">
+                                <i class="fa fa-sign-out fa-fw" aria-hidden="true"> Salir</i>
+                                </a>
+                            </li>
+                         </ul>
+                     </li>
+                 {% endblock %}
+             </ul>
+         </div>
+     {% endif %}
+ {% endblock %#}
