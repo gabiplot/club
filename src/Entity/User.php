@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,6 +28,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     private UserPasswordHasherInterface $passwordHasher;
+
+    /**
+     * @var Collection<int, Socio>
+     */
+    #[ORM\OneToMany(targetEntity: Socio::class, mappedBy: 'user')]
+    private Collection $socios;
+
+    public function __toString(): string
+    {
+        return strval($this->getEmail());
+    }
+
+    public function __construct()
+    {
+        $this->socios = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,5 +114,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // Si almacenas datos temporales sensibles en el usuario, límpialos aquí
+    }
+
+    /**
+     * @return Collection<int, Socio>
+     */
+    public function getSocios(): Collection
+    {
+        return $this->socios;
+    }
+
+    public function addSocio(Socio $socio): static
+    {
+        if (!$this->socios->contains($socio)) {
+            $this->socios->add($socio);
+            $socio->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSocio(Socio $socio): static
+    {
+        if ($this->socios->removeElement($socio)) {
+            // set the owning side to null (unless already changed)
+            if ($socio->getUser() === $this) {
+                $socio->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
