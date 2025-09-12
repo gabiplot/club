@@ -37,3 +37,8 @@ services:
         class: App\Admin\SocioAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Socio, controller: ~, manager_type: orm, group: admin, label: Socio }
+
+    admin.cuota:
+        class: App\Admin\CuotaAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: Cuota }

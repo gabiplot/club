@@ -1,0 +1,8 @@
+{% extends 'Socio/base_show_field.html.twig' %}
+
+{% block field %}
+    {%- include '@SonataAdmin/CRUD/display_boolean.html.twig' with {
+        value: value,
+        inverse: field_description.option('inverse'),
+    } only -%}
+{% endblock %}

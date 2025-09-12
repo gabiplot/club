@@ -1,0 +1,36 @@
+<th {% if field_description.option('row_attr') %}  class="{{ field_description.option('row_attr')['c1']}} text-right" field_description.option('row_attr') {% else %} class="col-md-5 col-sm-5 text-right" {% endif %}>
+    {%- block name -%}
+        {%- if field_description.label is not same as(false) -%}
+            {%- if field_description.translationDomain is same as(false) -%}
+                {{ field_description.label }} : 
+            {%- else -%}
+                {{ field_description.label|trans({}, field_description.translationDomain) }} :
+            {%- endif -%}
+        {%- endif -%}
+    {%- endblock -%}
+</th>
+<td {% if field_description.option('row_attr') %}  class="{{ field_description.option('row_attr')['c2']}}" field_description.option('row_attr') {% else %} class="col-md-7 col-sm-5" {% endif%}>
+    {%- block field -%}
+        {% set collapse = field_description.option('collapse') %}
+        {%- if collapse -%}
+            <div class="sonata-readmore"
+                  data-readmore-height="{{ collapse.height|default(40) }}"
+                  data-readmore-more="{{ collapse.more|default('read_more')|trans({}, 'SonataAdminBundle') }}"
+                  data-readmore-less="{{ collapse.less|default('read_less')|trans({}, 'SonataAdminBundle') }}">
+                {%- block field_value -%}
+                    {% if field_description.option('safe', false) %}{{ value|raw }}{% else %}{{ value|default('')|nl2br }}{% endif %}
+                {%- endblock -%}
+            </div>
+        {%- else -%}
+            {{- block('field_value') -}}
+        {%- endif -%}
+    {%- endblock -%}
+</td>
+
+{%- block field_compare -%}
+    {%- if value_compare is defined -%}
+        {% set value = value_compare %}
+        {% set object = object_compare %}
+        <td>{{- block('field') -}}</td>
+    {%- endif -%}
+{%- endblock -%}

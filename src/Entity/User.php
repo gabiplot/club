@@ -35,6 +35,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Socio::class, mappedBy: 'user')]
     private Collection $socios;
 
+    /**
+     * @var Collection<int, Cuota>
+     */
+    #[ORM\OneToMany(targetEntity: Cuota::class, mappedBy: 'user')]
+    private Collection $cuotas;
+
     public function __toString(): string
     {
         return strval($this->getEmail());
@@ -43,6 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->socios = new ArrayCollection();
+        $this->cuotas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,6 +147,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($socio->getUser() === $this) {
                 $socio->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuota $cuota): static
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas->add($cuota);
+            $cuota->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): static
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            // set the owning side to null (unless already changed)
+            if ($cuota->getUser() === $this) {
+                $cuota->setUser(null);
             }
         }
 

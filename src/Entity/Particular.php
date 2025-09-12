@@ -35,9 +35,12 @@ class Particular
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $fecha_nacimiento = null;
 
+    #[ORM\OneToOne(mappedBy: 'particular', cascade: ['persist', 'remove'])]
+    private ?Socio $socio = null;
+
     public function __toString(): string
     {
-        return strval($this->apellido . $this->nombre);
+        return strval($this->apellido . " " . $this->nombre);
     }
 
     public function getId(): ?int
@@ -125,6 +128,28 @@ class Particular
     public function setFechaNacimiento(?\DateTime $fecha_nacimiento): static
     {
         $this->fecha_nacimiento = $fecha_nacimiento;
+
+        return $this;
+    }
+
+    public function getSocio(): ?Socio
+    {
+        return $this->socio;
+    }
+
+    public function setSocio(?Socio $socio): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($socio === null && $this->socio !== null) {
+            $this->socio->setParticular(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($socio !== null && $socio->getParticular() !== $this) {
+            $socio->setParticular($this);
+        }
+
+        $this->socio = $socio;
 
         return $this;
     }

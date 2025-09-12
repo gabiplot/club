@@ -32,6 +32,10 @@ class Socio
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $fecha_update = null;
 
+    //#[ORM\OneToOne(inversedBy: 'socio', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'socio', cascade: ['persist'])]
+    private ?Particular $particular = null;
+
     public function __toString(): string
     {
         return strval($this->getId());
@@ -110,6 +114,18 @@ class Socio
     public function setFechaUpdate(?\DateTime $fecha_update): static
     {
         $this->fecha_update = $fecha_update;
+
+        return $this;
+    }
+
+    public function getParticular(): ?Particular
+    {
+        return $this->particular;
+    }
+
+    public function setParticular(?Particular $particular): static
+    {
+        $this->particular = $particular;
 
         return $this;
     }
