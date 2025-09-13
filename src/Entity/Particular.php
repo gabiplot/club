@@ -40,7 +40,13 @@ class Particular
 
     public function __toString(): string
     {
-        return strval($this->apellido . " " . $this->nombre);
+        $nombre = "";
+        $apellido = "";
+
+        $nombre = $this->getNombre() ?? "";
+        $apellido = $this->getDni() ?? "";
+
+        return strval($apellido . " " . $nombre);
     }
 
     public function getId(): ?int

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SocioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,9 +38,31 @@ class Socio
     #[ORM\OneToOne(inversedBy: 'socio', cascade: ['persist'])]
     private ?Particular $particular = null;
 
+    /**
+     * @var Collection<int, Cuota>
+     */
+    #[ORM\OneToMany(targetEntity: Cuota::class, mappedBy: 'socio')]
+    private Collection $cuotas;
+
+    #[ORM\ManyToOne(inversedBy: 'socios')]
+    private ?Categoria $categoria = null;
+
+    public function __construct()
+    {
+        $this->cuotas = new ArrayCollection();
+    }
+
     public function __toString(): string
     {
-        return strval($this->getId());
+        $nombre = "";
+        $apellido = "";
+
+        if($this->particular){
+            $nombre = $this->particular->getNombre() ?? "";
+            $apellido = $this->particular->getDni() ?? "";
+        }
+
+        return strval($nombre. " " . $apellido);
     }
 
     public function getId(): ?int
@@ -126,6 +150,48 @@ class Socio
     public function setParticular(?Particular $particular): static
     {
         $this->particular = $particular;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuota $cuota): static
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas->add($cuota);
+            $cuota->setSocio($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): static
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            // set the owning side to null (unless already changed)
+            if ($cuota->getSocio() === $this) {
+                $cuota->setSocio(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategoria(): ?Categoria
+    {
+        return $this->categoria;
+    }
+
+    public function setCategoria(?Categoria $categoria): static
+    {
+        $this->categoria = $categoria;
 
         return $this;
     }

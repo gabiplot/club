@@ -38,6 +38,9 @@ class Cuota
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $fecha_update = null;
 
+    #[ORM\ManyToOne(inversedBy: 'cuotas')]
+    private ?Socio $socio = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class Cuota
     public function setFechaUpdate(?\DateTime $fecha_update): static
     {
         $this->fecha_update = $fecha_update;
+
+        return $this;
+    }
+
+    public function getSocio(): ?Socio
+    {
+        return $this->socio;
+    }
+
+    public function setSocio(?Socio $socio): static
+    {
+        $this->socio = $socio;
 
         return $this;
     }

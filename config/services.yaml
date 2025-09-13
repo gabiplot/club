@@ -42,3 +42,13 @@ services:
         class: App\Admin\CuotaAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: Cuota }
+
+    admin.asignar_cuota:
+        class: App\Admin\AsignarCuotaAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\AsignarCuota, controller: ~, manager_type: orm, group: admin, label: AsignarCuota }
+
+    admin.categoria:
+        class: App\Admin\CategoriaAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Categoria, controller: ~, manager_type: orm, group: admin, label: Categoria }

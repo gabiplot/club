@@ -31,14 +31,15 @@ final class SocioAdmin extends AbstractAdmin
             //->add('id')
             ->add('particular', null,['label'=>'Apellido y Nombre', 'header_class' =>'col-md-2 text-center'])
             ->add('particular.dni', null,['label'=>'DNI', 'header_class' =>'col-md-2 text-center'])
-            ->add('estado',null,['header_class' =>'col-md-2 text-center'])
+            ->add('estado',null,['header_class' =>'col-md-1 text-center'])
+            ->add('categoria.nombre',null,['label'=>'categoria', 'header_class' =>'col-md-2 text-center'])
             //->add('observacion')
-            ->add('fecha_ingreso',null,['format' => 'd-m-Y', null,'header_class' =>'col-md-2 text-center'])
+            ->add('fecha_ingreso',null,['format' => 'd-m-Y', 'header_class' =>'col-md-1 text-center'])
             //->add('fecha_egreso',null,['format' => 'd-m-Y'])
             //->add('fecha_update',null,['format' => 'd-m-Y', 'label'=>'Fecha Actualización'])
             //->add('user')
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'header_class' =>'col-md-2 text-center',
+                'header_class' =>'col-md-4 text-center',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -68,7 +69,11 @@ TXT;
         $form
             //->add('id')
             //FILTRAR PARTICULAR Y AGREGAR BOTON AGREGAR
-            ->add('particular',ModelListType::class,['label'=>'Datos Particulares', 'help'=>$string])
+            ->add('particular',ModelListType::class,[
+                                                     'label'=>'Datos Particulares', 
+                                                     'help'=>$string, 
+                                                     'required'=>true
+                                                     ])
             ->add('estado', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'ACTIVO' => true,
@@ -81,11 +86,13 @@ TXT;
                 'placeholder' => 'Choose an option',
                 'required' => true
             ])
+            ->add('categoria')
             ->add('observacion')
             ->add('fecha_ingreso',null,['widget'=>'single_text'])
             ->add('fecha_egreso',null,['widget'=>'single_text'])
             ->add('user')
-            ->add('fecha_update',null,['widget'=>'single_text','label'=>'Fecha Actualización'])       
+            ->add('fecha_update',null,['widget'=>'single_text',
+                                       'label'=>'Fecha Actualización'])       
         ;
     }
 
@@ -93,23 +100,42 @@ TXT;
     {
         $show
             ->with('Datos Particulares', ['class'=>'col-md-6'])
-            ->add('id',null,['label'=>'Nro de Socio','template' =>'Socio/base_show_field.html.twig'])
-            ->add('estado',null,['label'=>'Activo','template' =>'Socio/show_boolean.html.twig'])
-            ->add('particular', null,['label'=>'Apellido y Nombre','template' =>'Socio/base_show_field.html.twig'])
-            ->add('particular.dni', null,['label'=>'DNI','template' =>'Socio/base_show_field.html.twig'])
-            ->add('particular.email', null,['label'=>'E-Mail','template' =>'Socio/base_show_field.html.twig'])
-            ->add('particular.direccion', null,['label'=>'E-Mail','template' =>'Socio/base_show_field.html.twig'])
-            ->add('particular.telefono', null,['label'=>'E-Mail','label'=>'Teléfono','template' =>'Socio/base_show_field.html.twig'])
-            ->add('particular.fecha_nacimiento', null, ['format'=>'d/m/Y', 'label'=>'Fecha Nacimiento', 'template' =>'Socio/show_date.html.twig'])
+            ->add('id',null,['label'=>'Nro de Socio',
+                             'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular', null,['label'=>'Apellido y Nombre',
+                                      'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular.dni', null,['label'=>'DNI',
+                                          'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular.email', null,['label'=>'E-Mail',
+                                            'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular.direccion', null,['label'=>'E-Mail',
+                                                'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular.telefono', null,['label'=>'E-Mail',
+                                               'label'=>'Teléfono',
+                                               'template' =>'Socio/base_show_field.html.twig'])
+            ->add('particular.fecha_nacimiento', null, ['format'=>'d/m/Y', 
+                                                        'label'=>'Fecha Nacimiento', 
+                                                        'template' =>'Socio/show_date.html.twig'])
             ->end()
             ->with('Datos Socio', ['class'=>'col-md-6'])            
-            ->add('fecha_ingreso',null,['format'=>'d/m/Y', 'template' =>'Socio/show_date.html.twig'])
-            ->add('fecha_egreso',null, ['format'=>'d/m/Y', 'label'=>'Fecha Suspendido','template' =>'Socio/show_date.html.twig'])
-            ->add('user',null,['template' =>'Socio/base_show_field.html.twig'])
-            ->add('fecha_update',null, ['format'=>'d/m/Y', 'label'=>'Ultima Actualización', 'template' =>'Socio/show_date.html.twig'])
+            ->add('estado',null,['label'=>'Activo',
+                                 'template' =>'Socio/show_boolean.html.twig'])
+            ->add('categoria',null,['label'=>'Categoria',
+                                    'template' =>'Socio/base_show_field.html.twig'])                                             
+            ->add('fecha_ingreso',null,['format'=>'d/m/Y', 
+                                        'template' =>'Socio/show_date.html.twig'])
+            ->add('fecha_egreso',null, ['format'=>'d/m/Y',
+                                        'label'=>'Fecha Suspendido',
+                                        'template' =>'Socio/show_date.html.twig'])
             ->end()
             ->with('Observaciones')
-            ->add('observacion',null, ['row_attr'=>['c1'=>'col-md-1','c2'=>'col-md-11'],'template' =>'Socio/base_show_field.html.twig'])
+                ->add('observacion',null, ['row_attr'=>['c1'=>'col-md-2','c2'=>'col-md-10'],
+                                       'template' =>'Socio/base_show_field.html.twig'])
+                ->add('fecha_update',null, ['format'=>'d/m/Y', 
+                                       'label'=>'Ultima Actualización',
+                                       'template' =>'Socio/show_date.html.twig'])            
+                ->add('user',null,['label'=>'Quien Actualizo', 
+                                   'template' =>'Socio/base_show_field.html.twig'])                                                                               
             ->end()
         ;
     }

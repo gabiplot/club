@@ -46,17 +46,49 @@ final class CuotaAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
+
         $form
-            //->add('id')
-            ->add('socio')
-            ->add('fecha')
-            ->add('importe')
-            ->add('importe_abonado')
+        ->with('Cuota',['class'=>'col-md-4'])
+        ->add('socio')
+        ;
+
+        if ($this->isCurrentRoute('edit')) 
+        {
+            $form
+            ->add('fecha',null,[
+                'widget'=>'single_text',
+                'required'=>true,
+            ]);
+        } 
+        else if ($this->isCurrentRoute('create'))
+        {
+            $form
+            ->add('fecha',null,[
+                'widget'=>'single_text',
+                'data'=>(new \DateTime('now')),
+                'required'=>true,
+            ]);
+        }
+
+        $form   
+            ->add('periodo')            
+            ->end()
+            ->with('Estado',['class'=>'col-md-4'])        
             ->add('estado')
-            ->add('saldo')
-            ->add('periodo')
+            ->add('importe')
+            ->add('importe_abonado')            
+            ->end()//estado
+            ->with('Saldo',['class'=>'col-md-4'])        
+            ->add('saldo')            
+            ->end()//saldo
+            ->with('Usuario')
             ->add('user')
-            ->add('fecha_update')
+            ->add('fecha_update',null,[
+                'data'=>(new \DateTime('now')),
+                'widget'=>'single_text',
+                'required'=>true,
+               ])
+            ->end()
         ;
     }
 
