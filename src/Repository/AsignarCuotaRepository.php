@@ -6,6 +6,7 @@ use App\Entity\AsignarCuota;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use App\Entity\Cuota;
 /**
  * @extends ServiceEntityRepository<AsignarCuota>
  */
@@ -16,9 +17,43 @@ class AsignarCuotaRepository extends ServiceEntityRepository
         parent::__construct($registry, AsignarCuota::class);
     }
 
-    public function asignarCuotas($object): void
+    public function asignarCuotas($socioIterator, $object): void
     {
-        dd("asignar cuotas");
+        foreach($socioIterator as $socio)
+        {
+            $categoria = $socio->getCategoria();
+            $importe = $categoria->getImporte();
+
+            $cuota = new Cuota;
+            $cuota->setSocio($socio); //
+            $cuota->setFecha($object->getFecha()); //
+            $cuota->setPeriodo($object->getPeriodo()); //
+            $cuota->setEstado('PENDIENTE'); //
+            $cuota->setImporte($importe); //
+            $cuota->setImporteAbonado('0.00'); //
+            $cuota->setSaldo('0.00');//
+            $cuota->setFechaUpdate(new \DateTime('now'));//
+
+            if ($cuota)
+            {
+                
+                $persist = $this->getEntityManager(Cuota::class)
+                                ->persist($cuota)               
+                ;
+            }
+            
+            //dump($cuota);
+        }
+
+        //$socios = $socioRepository;
+        
+        //dump($socios);
+
+        //dump($object);
+
+        //dump($this);
+
+        //dd("asignar cuotas respository");
     }
 
     //    /**

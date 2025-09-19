@@ -126,15 +126,24 @@ final class AsignarCuotaAdmin extends AbstractAdmin
     public function prePersist(Object $object): void
     {
         $this->asignarCuotas($object);
-        dd($object);
+        //dd($object);
     }
 
 	public function asignarCuotas(Object $object): void
 	{ 	 
+        $socioIterable = $this->getModelManager()
+                       ->getEntityManager($this->getClass())
+                       ->getRepository('App\Entity\Socio')
+                       ->iterable()
+                       //->createQueryBuilder('s')
+                       //->getQuery()
+                       //->toIterable()
+                       ;
+
     	$ea = $this->getModelManager()
                	->getEntityManager($this->getClass())
                	->getRepository($this->getClass())
-               	->asignarCuotas($object)
+               	->asignarCuotas($socioIterable, $object)
                 ;
     	//return $ea;
 	}

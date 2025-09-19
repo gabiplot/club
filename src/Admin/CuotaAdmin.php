@@ -48,6 +48,7 @@ final class CuotaAdmin extends AbstractAdmin
     {
 
         $form
+        ->tab('Cuota')
         ->with('Cuota',['class'=>'col-md-4'])
         ->add('socio')
         ;
@@ -74,13 +75,15 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('periodo')            
             ->end()
             ->with('Estado',['class'=>'col-md-4'])        
-            ->add('estado')
-            ->add('importe')
-            ->add('importe_abonado')            
+            ->add('estado')           
             ->end()//estado
             ->with('Saldo',['class'=>'col-md-4'])        
+            ->add('importe',null,['label'=>'Importe Cuota'])
+            ->add('importe_abonado')             
             ->add('saldo')            
             ->end()//saldo
+            ->end()
+            ->tab('Usuario')
             ->with('Usuario')
             ->add('user')
             ->add('fecha_update',null,[
@@ -88,6 +91,7 @@ final class CuotaAdmin extends AbstractAdmin
                 'widget'=>'single_text',
                 'required'=>true,
                ])
+            ->end()
             ->end()
         ;
     }

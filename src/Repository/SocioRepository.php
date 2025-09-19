@@ -16,6 +16,18 @@ class SocioRepository extends ServiceEntityRepository
         parent::__construct($registry, Socio::class);
     }
 
+    public function iterable()
+        {
+            return $this->createQueryBuilder('s')
+                        ->getQuery()
+                        ->toIterable()
+                    ;
+        }
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
     //    /**
     //     * @return Socio[] Returns an array of Socio objects
     //     */
