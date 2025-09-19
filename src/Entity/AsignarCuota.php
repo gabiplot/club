@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AsignarCuotaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,6 +26,17 @@ class AsignarCuota
     #[Assert\NotBlank]
     #[Assert\NotNull]
     private ?string $periodo = null;
+
+    /**
+     * @var Collection<int, Cuota>
+     */
+    #[ORM\OneToMany(targetEntity: Cuota::class, mappedBy: 'asignarcuota', cascade: ['persist', 'remove'])]
+    private Collection $cuotas;
+
+    public function __construct()
+    {
+        $this->cuotas = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -59,6 +72,36 @@ class AsignarCuota
     public function setPeriodo(?string $periodo): static
     {
         $this->periodo = $periodo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cuota>
+     */
+    public function getCuotas(): Collection
+    {
+        return $this->cuotas;
+    }
+
+    public function addCuota(Cuota $cuota): static
+    {
+        if (!$this->cuotas->contains($cuota)) {
+            $this->cuotas->add($cuota);
+            $cuota->setAsignarcuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCuota(Cuota $cuota): static
+    {
+        if ($this->cuotas->removeElement($cuota)) {
+            // set the owning side to null (unless already changed)
+            if ($cuota->getAsignarcuota() === $this) {
+                $cuota->setAsignarcuota(null);
+            }
+        }
 
         return $this;
     }

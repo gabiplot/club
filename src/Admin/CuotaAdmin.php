@@ -16,25 +16,29 @@ final class CuotaAdmin extends AbstractAdmin
     {
         $filter
             ->add('id')
-            ->add('fecha')
+            //->add('fecha')
             ->add('importe')
             ->add('importe_abonado')
             ->add('estado')
             ->add('saldo')
-            ->add('periodo')
+            ->add('asignarcuota.fecha')
+            ->add('asignarcuota.periodo')
+            //->add('periodo')
         ;
     }
 
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('id')
-            ->add('fecha')
+            //->add('id')
+            //->add('fecha')
+            ->add('asignarcuota.fecha')
             ->add('importe')
             ->add('importe_abonado')
             ->add('estado')
             ->add('saldo')
-            ->add('periodo')
+            ->add('asignarcuota.periodo')
+            //->add('periodo')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -53,6 +57,7 @@ final class CuotaAdmin extends AbstractAdmin
         ->add('socio')
         ;
 
+        /*
         if ($this->isCurrentRoute('edit')) 
         {
             $form
@@ -70,9 +75,11 @@ final class CuotaAdmin extends AbstractAdmin
                 'required'=>true,
             ]);
         }
+        */
 
         $form   
-            ->add('periodo')            
+            //->add('periodo')
+            ->add('asignarcuota',null,['required'=>true])
             ->end()
             ->with('Estado',['class'=>'col-md-4'])        
             ->add('estado')           
@@ -100,12 +107,12 @@ final class CuotaAdmin extends AbstractAdmin
     {
         $show
             //->add('id')
-            ->add('fecha')
+            //->add('fecha')
             ->add('importe')
             ->add('importe_abonado')
             ->add('estado')
             ->add('saldo')
-            ->add('periodo')
+            //->add('periodo')
         ;
     }
 }

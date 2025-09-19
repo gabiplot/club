@@ -26,8 +26,9 @@ class AsignarCuotaRepository extends ServiceEntityRepository
 
             $cuota = new Cuota;
             $cuota->setSocio($socio); //
-            $cuota->setFecha($object->getFecha()); //
-            $cuota->setPeriodo($object->getPeriodo()); //
+            //$cuota->setFecha($object->getFecha()); //
+            //$cuota->setPeriodo($object->getPeriodo()); //
+            $cuota->setAsignarcuota($object);
             $cuota->setEstado('PENDIENTE'); //
             $cuota->setImporte($importe); //
             $cuota->setImporteAbonado('0.00'); //

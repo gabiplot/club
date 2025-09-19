@@ -14,9 +14,6 @@ class Cuota
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTime $fecha = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $importe = null;
 
@@ -29,9 +26,6 @@ class Cuota
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $saldo = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $periodo = null;
-
     #[ORM\ManyToOne(inversedBy: 'cuotas')]
     private ?User $user = null;
 
@@ -41,21 +35,21 @@ class Cuota
     #[ORM\ManyToOne(inversedBy: 'cuotas')]
     private ?Socio $socio = null;
 
+    #[ORM\ManyToOne(inversedBy: 'cuotas')]
+    private ?AsignarCuota $asignarcuota = null;
+
+    public function __toString(): string
+    {
+
+        $asignarcuota = $this->getAsignarcuota() ?? "";
+        $socio = $this->getSocio() ?? "";
+
+        return strval($asignarcuota . " " . $socio);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFecha(): ?\DateTime
-    {
-        return $this->fecha;
-    }
-
-    public function setFecha(?\DateTime $fecha): static
-    {
-        $this->fecha = $fecha;
-
-        return $this;
     }
 
     public function getImporte(): ?string
@@ -106,18 +100,6 @@ class Cuota
         return $this;
     }
 
-    public function getPeriodo(): ?string
-    {
-        return $this->periodo;
-    }
-
-    public function setPeriodo(string $periodo): static
-    {
-        $this->periodo = $periodo;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -150,6 +132,18 @@ class Cuota
     public function setSocio(?Socio $socio): static
     {
         $this->socio = $socio;
+
+        return $this;
+    }
+
+    public function getAsignarcuota(): ?AsignarCuota
+    {
+        return $this->asignarcuota;
+    }
+
+    public function setAsignarcuota(?AsignarCuota $asignarcuota): static
+    {
+        $this->asignarcuota = $asignarcuota;
 
         return $this;
     }

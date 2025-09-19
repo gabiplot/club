@@ -108,6 +108,7 @@ final class AsignarCuotaAdmin extends AbstractAdmin
 
     //FUNCIONES PARTICULARES
     //QUITAR BATCH DELETE
+    /*
 	public function configureBatchActions($actions): array
 	{
     	if (isset($actions['delete'])) {
@@ -116,11 +117,12 @@ final class AsignarCuotaAdmin extends AbstractAdmin
 
     	return $actions;
 	}
+    */
  
     public function preUpdate(Object $object): void
     {        
-        $this->asignarCuotas($object);
-        dd($object);
+        //$this->asignarCuotas($object);
+        //dd($object);
     }
 
     public function prePersist(Object $object): void
