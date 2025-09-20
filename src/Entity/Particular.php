@@ -42,11 +42,24 @@ class Particular
     {
         $nombre = "";
         $apellido = "";
+        $dni = "";
 
         $nombre = $this->getNombre() ?? "";
-        $apellido = $this->getDni() ?? "";
+        $apellido = $this->getApellido() ?? "";
+        $dni = $this->getDni() ?? "";
 
-        return strval($apellido . " " . $nombre);
+        return strval($apellido . " " . $nombre . " " . $dni);
+    }
+
+    public function getApeNom(): string
+    {
+        $nombre = "";
+        $apellido = "";
+
+        $nombre = $this->getNombre() ?? "";
+        $apellido = $this->getApellido() ?? "";
+
+        return strval($apellido . ", " . $nombre);
     }
 
     public function getId(): ?int

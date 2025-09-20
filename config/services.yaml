@@ -43,6 +43,11 @@ services:
         tags:
             - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: Cuota }
 
+    admin.cuotapendiente:
+        class: App\Admin\CuotaPendienteAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: CuotaPendiente }
+
     admin.asignar_cuota:
         class: App\Admin\AsignarCuotaAdmin
         tags:
@@ -52,3 +57,8 @@ services:
         class: App\Admin\CategoriaAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Categoria, controller: ~, manager_type: orm, group: admin, label: Categoria }
+
+    admin.pago_cuota:
+        class: App\Admin\PagoCuotaAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\PagoCuota, controller: ~, manager_type: orm, group: admin, label: PagoCuota }

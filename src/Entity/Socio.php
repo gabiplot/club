@@ -47,9 +47,16 @@ class Socio
     #[ORM\ManyToOne(inversedBy: 'socios')]
     private ?Categoria $categoria = null;
 
+    /**
+     * @var Collection<int, PagoCuota>
+     */
+    #[ORM\OneToMany(targetEntity: PagoCuota::class, mappedBy: 'socio')]
+    private Collection $pagoCuotas;
+
     public function __construct()
     {
         $this->cuotas = new ArrayCollection();
+        $this->pagoCuotas = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -192,6 +199,36 @@ class Socio
     public function setCategoria(?Categoria $categoria): static
     {
         $this->categoria = $categoria;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PagoCuota>
+     */
+    public function getPagoCuotas(): Collection
+    {
+        return $this->pagoCuotas;
+    }
+
+    public function addPagoCuota(PagoCuota $pagoCuota): static
+    {
+        if (!$this->pagoCuotas->contains($pagoCuota)) {
+            $this->pagoCuotas->add($pagoCuota);
+            $pagoCuota->setSocio($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagoCuota(PagoCuota $pagoCuota): static
+    {
+        if ($this->pagoCuotas->removeElement($pagoCuota)) {
+            // set the owning side to null (unless already changed)
+            if ($pagoCuota->getSocio() === $this) {
+                $pagoCuota->setSocio(null);
+            }
+        }
 
         return $this;
     }
