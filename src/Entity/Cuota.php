@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CuotaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,11 @@ class Cuota
 
     #[ORM\ManyToOne(inversedBy: 'cuotas')]
     private ?AsignarCuota $asignarcuota = null;
+
+    public function __construct()
+    {
+        $this->pagoCuotaCuotas = new ArrayCollection();
+    }
 
     public function __toString(): string
     {

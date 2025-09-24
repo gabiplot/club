@@ -41,7 +41,7 @@ services:
     admin.cuota:
         class: App\Admin\CuotaAdmin
         tags:
-            - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: Cuota }
+            - { name: sonata.admin, model_class: App\Entity\Cuota, controller: ~, manager_type: orm, group: admin, label: Cuota, default: true }
 
     admin.cuotapendiente:
         class: App\Admin\CuotaPendienteAdmin
