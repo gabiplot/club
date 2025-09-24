@@ -62,3 +62,8 @@ services:
         class: App\Admin\PagoCuotaAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\PagoCuota, controller: ~, manager_type: orm, group: admin, label: PagoCuota }
+
+    admin.pago_cuota_detalle:
+        class: App\Admin\PagoCuotaDetalleAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\PagoCuotaDetalle, controller: ~, manager_type: orm, group: admin, label: PagoCuotaDetalle }

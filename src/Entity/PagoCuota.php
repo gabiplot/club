@@ -22,8 +22,15 @@ class PagoCuota
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $fecha_pago = null;
 
+    /**
+     * @var Collection<int, PagoCuotaDetalle>
+     */
+    #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'pagocuota')]
+    private Collection $pagoCuotaDetalles;
+
     public function __construct()
     {
+        $this->pagoCuotaDetalles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -60,6 +67,36 @@ class PagoCuota
     public function setFechaPago(?\DateTime $fecha_pago): static
     {
         $this->fecha_pago = $fecha_pago;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PagoCuotaDetalle>
+     */
+    public function getPagoCuotaDetalles(): Collection
+    {
+        return $this->pagoCuotaDetalles;
+    }
+
+    public function addPagoCuotaDetalle(PagoCuotaDetalle $pagoCuotaDetalle): static
+    {
+        if (!$this->pagoCuotaDetalles->contains($pagoCuotaDetalle)) {
+            $this->pagoCuotaDetalles->add($pagoCuotaDetalle);
+            $pagoCuotaDetalle->setPagocuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagoCuotaDetalle(PagoCuotaDetalle $pagoCuotaDetalle): static
+    {
+        if ($this->pagoCuotaDetalles->removeElement($pagoCuotaDetalle)) {
+            // set the owning side to null (unless already changed)
+            if ($pagoCuotaDetalle->getPagocuota() === $this) {
+                $pagoCuotaDetalle->setPagocuota(null);
+            }
+        }
 
         return $this;
     }

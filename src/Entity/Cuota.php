@@ -40,9 +40,16 @@ class Cuota
     #[ORM\ManyToOne(inversedBy: 'cuotas')]
     private ?AsignarCuota $asignarcuota = null;
 
+    /**
+     * @var Collection<int, PagoCuotaDetalle>
+     */
+    #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'cuota')]
+    private Collection $pagoCuotaDetalles;
+
     public function __construct()
     {
         $this->pagoCuotaCuotas = new ArrayCollection();
+        $this->pagoCuotaDetalles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -50,8 +57,9 @@ class Cuota
 
         $asignarcuota = $this->getAsignarcuota() ?? "";
         $socio = $this->getSocio() ?? "";
+        $saldo = $this->getSaldo() ?? "";
 
-        return strval($asignarcuota . " " . $socio);
+        return strval($asignarcuota . " " . $socio . " Saldo: " . $saldo);
     }
 
     public function getId(): ?int
@@ -151,6 +159,36 @@ class Cuota
     public function setAsignarcuota(?AsignarCuota $asignarcuota): static
     {
         $this->asignarcuota = $asignarcuota;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PagoCuotaDetalle>
+     */
+    public function getPagoCuotaDetalles(): Collection
+    {
+        return $this->pagoCuotaDetalles;
+    }
+
+    public function addPagoCuotaDetalle(PagoCuotaDetalle $pagoCuotaDetalle): static
+    {
+        if (!$this->pagoCuotaDetalles->contains($pagoCuotaDetalle)) {
+            $this->pagoCuotaDetalles->add($pagoCuotaDetalle);
+            $pagoCuotaDetalle->setCuota($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagoCuotaDetalle(PagoCuotaDetalle $pagoCuotaDetalle): static
+    {
+        if ($this->pagoCuotaDetalles->removeElement($pagoCuotaDetalle)) {
+            // set the owning side to null (unless already changed)
+            if ($pagoCuotaDetalle->getCuota() === $this) {
+                $pagoCuotaDetalle->setCuota(null);
+            }
+        }
 
         return $this;
     }

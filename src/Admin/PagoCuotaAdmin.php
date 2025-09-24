@@ -10,8 +10,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Sonata\AdminBundle\Validator\ErrorElement;
+
 final class PagoCuotaAdmin extends AbstractAdmin
 {
+
+    
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -24,10 +29,11 @@ final class PagoCuotaAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('id')
-            ->add('fecha_pago')
-            ->add('socio')
+            ->add('id',null, ['header_class' =>'col-md-3 text-center'])
+            ->add('fecha_pago', null,['format' => 'd-m-Y', 'header_class' =>'col-md-3 text-center'])
+            ->add('socio',null, ['header_class' =>'col-md-3 text-center'])
             ->add(ListMapper::NAME_ACTIONS, null, [
+                'header_class' =>'col-md-3 text-center',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -46,6 +52,7 @@ final class PagoCuotaAdmin extends AbstractAdmin
                         'data'=>(new \DateTime('now')),
                         'required'=>true,
                     ]);
+                $form->add('socio',null,['required'=>true]);
             } 
         else if ($this->isCurrentRoute('edit'))
             {
@@ -53,16 +60,21 @@ final class PagoCuotaAdmin extends AbstractAdmin
                     ->add('fecha_pago',null,[
                         'widget'=>'single_text',                        
                         'required'=>true,
+                        'disabled'=>true,
                     ]);
+                $form->add('socio',null,['disabled'=>true]);
             }
 
-            $form->add('socio');
+            
     }
 
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('id')
+            ->add('fecha_pago')
+            ->add('socio')
         ;
     }
+    
 }

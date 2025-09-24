@@ -31,11 +31,12 @@ final class CuotaPendienteAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('asignarcuota.fecha')
+            ->add('socio')
+            ->add('asignarcuota.fecha',null,['format' => 'd-m-Y'])            
             ->add('importe')
             ->add('importe_abonado')
-            ->add('estado')
             ->add('saldo')
+            ->add('estado')            
             ->add('asignarcuota.periodo')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [

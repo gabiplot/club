@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class CuotaAdmin extends AbstractAdmin
 {
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -30,17 +31,13 @@ final class CuotaAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            //->add('id')
-            //->add('fecha')
-            ->add('asignarcuota.fecha')
-            ->add('socio.particular.apenom')
-            ->add('socio.particular.dni')
+            ->add('socio')
+            ->add('asignarcuota.fecha',null,['format' => 'd-m-Y'])
+            ->add('asignarcuota.periodo')
+            ->add('estado')
             ->add('importe')
             ->add('importe_abonado')
-            ->add('estado')
             ->add('saldo')
-            ->add('asignarcuota.periodo')
-            //->add('periodo')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
