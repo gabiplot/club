@@ -33,6 +33,12 @@ class PagoCuotaDetalle
     #[Assert\Callback]
     public function validateImporte(ExecutionContextInterface $context): void
     {
+        if ($this->cuota === null){
+            $context->buildViolation('Debe seleccionar al menos una cuota.')
+                ->atPath('cuota')
+                ->addViolation();
+                return;
+        }
         //dd("validate");
         $saldo = $this->cuota->getSaldo();        
         //dump((float) $saldo);
@@ -42,6 +48,7 @@ class PagoCuotaDetalle
             $context->buildViolation('El importe debe ser MENOR O IGUAL que el de la cuota')
                 ->atPath('importe')
                 ->addViolation();
+
         }
         //dump("no");
         //dd("finvalidate");

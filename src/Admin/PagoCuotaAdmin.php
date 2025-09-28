@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Admin\AdminInterface;
 
-use Sonata\AdminBundle\Validator\ErrorElement;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 final class PagoCuotaAdmin extends AbstractAdmin
 {
 
-    
+
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -23,17 +25,20 @@ final class PagoCuotaAdmin extends AbstractAdmin
             ->add('id')
             ->add('fecha_pago')
             ->add('socio')
+            ->add('estado');
         ;
     }
 
     protected function configureListFields(ListMapper $list): void
     {
+        dump($this);
         $list
-            ->add('id',null, ['header_class' =>'col-md-3 text-center'])
-            ->add('fecha_pago', null,['format' => 'd-m-Y', 'header_class' =>'col-md-3 text-center'])
-            ->add('socio',null, ['header_class' =>'col-md-3 text-center'])
+            ->add('id',null, ['header_class' =>'col-md-2 text-center'])
+            ->add('fecha_pago', null,['format' => 'd-m-Y', 'header_class' =>'col-md-2 text-center'])
+            ->add('socio',null, ['header_class' =>'col-md-2 text-center'])
+            ->add('estado',null, ['label'=>'Finalizado','header_class' =>'col-md-2 text-center'])
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'header_class' =>'col-md-3 text-center',
+                'header_class' =>'col-md-4 text-center',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -53,6 +58,8 @@ final class PagoCuotaAdmin extends AbstractAdmin
                         'required'=>true,
                     ]);
                 $form->add('socio',null,['required'=>true]);
+                $form->add('total',null,['data'=>'0.00', 'required'=>true]);
+                $form->add('estado',null, ['data'=>false, 'label'=>'Finalizado']);
             } 
         else if ($this->isCurrentRoute('edit'))
             {
@@ -63,8 +70,11 @@ final class PagoCuotaAdmin extends AbstractAdmin
                         'disabled'=>true,
                     ]);
                 $form->add('socio',null,['disabled'=>true]);
+                $form->add('total',null,['disabled'=>true]);
+                $form->add('estado',null, ['label'=>'Finalizado','disabled'=>true]);
             }
-
+            
+            
             
     }
 
@@ -74,7 +84,47 @@ final class PagoCuotaAdmin extends AbstractAdmin
             ->add('id')
             ->add('fecha_pago')
             ->add('socio')
+            ->add('estado',null, ['label'=>'Finalizado']);
         ;
     }
+
+
+    /*
+    * MIS FUNCIONES
+    **/
+    //RUTA POR DEFECTO PARA USAR EN EL CONTROLLER
+    protected function configureRoutes(RouteCollectionInterface $collection): void
+    {
+        $collection->add('finalizar', $this->getRouterIdParameter().'/finalizar');
+    }
+
+
+    protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null) :void
+    {
+
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        
+        $id = $admin->getRequest()->get('id');
+
+        $menu->addChild('Listado', $admin->generateMenuUrl('show', ['id' => $id]));
+
+        
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('Editar', $admin->generateMenuUrl('edit', ['id' => $id]));
+        }
+
+        if ($this->isGranted('LIST')) {
+            //if ($this->getSubject()->getEstado()){
+                $menu->addChild('Detalle', $admin->generateMenuUrl('admin.pago_cuota_detalle.list', ['id' => $id]));
+            //}        
+        }
+        
+    }
+
+
     
 }

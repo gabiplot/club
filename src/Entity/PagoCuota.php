@@ -28,6 +28,12 @@ class PagoCuota
     #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'pagocuota')]
     private Collection $pagoCuotaDetalles;
 
+    #[ORM\Column]
+    private ?bool $estado = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $total = null;
+
     public function __construct()
     {
         $this->pagoCuotaDetalles = new ArrayCollection();
@@ -41,6 +47,15 @@ class PagoCuota
         return strval($socio);
     }
 
+    public function getTotalPagoCuota(): string
+    {
+
+        $subtotal = 0.0;
+        foreach ($this->pagoCuotaDetalles as $pcd){
+            $subtotal = $subtotal + $pcd->getImporte();
+        }
+        return sprintf("%.2f", $subtotal );
+    }    
 
     public function getId(): ?int
     {
@@ -97,6 +112,30 @@ class PagoCuota
                 $pagoCuotaDetalle->setPagocuota(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEstado(): ?bool
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(bool $estado): static
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    public function getTotal(): ?string
+    {
+        return $this->total;
+    }
+
+    public function setTotal(string $total): static
+    {
+        $this->total = $total;
 
         return $this;
     }

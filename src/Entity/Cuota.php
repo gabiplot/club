@@ -48,8 +48,28 @@ class Cuota
 
     public function __construct()
     {
-        $this->pagoCuotaCuotas = new ArrayCollection();
         $this->pagoCuotaDetalles = new ArrayCollection();
+    }
+
+    public function getImporteAbonadoMagico(): string
+    {
+        $total = 0.00;
+        foreach($this->pagoCuotaDetalles as $pcd)
+        {
+            
+            $total = $total + (float) $pcd->getImporte();
+        }
+
+        return strval($total);
+    }
+
+    public function getEstadoMagico(): string
+    {
+        if ((float)$this->getImporteAbonadoMagico() < (float)$this->getImporte()){
+            return 'PENDIENTE';
+        } else {
+            return 'ABONADO';
+        }
     }
 
     public function __toString(): string

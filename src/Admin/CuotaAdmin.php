@@ -34,10 +34,12 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('socio')
             ->add('asignarcuota.fecha',null,['format' => 'd-m-Y'])
             ->add('asignarcuota.periodo')
+            ->add('importeAbonadoMagico')
+            ->add('estadomagico')
             ->add('estado')
             ->add('importe')
             ->add('importe_abonado')
-            ->add('saldo')
+            ->add('saldo',null,['label'=>'saldo a pagar'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
