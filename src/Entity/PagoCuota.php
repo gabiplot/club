@@ -55,7 +55,17 @@ class PagoCuota
             $subtotal = $subtotal + $pcd->getImporte();
         }
         return sprintf("%.2f", $subtotal );
-    }    
+    } 
+
+    public function getCuotas()
+    {
+        $tmp = "";
+        foreach($this->pagoCuotaDetalles as $pcd)
+        {
+            $tmp = $tmp . "Abonado: " . $pcd->getImporte() . " de Cuota: " . $pcd->getCuota()->getAsignarCuota()->getPeriodo() . ". ";
+        }
+        return $tmp;
+    }
 
     public function getId(): ?int
     {

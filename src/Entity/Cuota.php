@@ -46,6 +46,17 @@ class Cuota
     #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'cuota')]
     private Collection $pagoCuotaDetalles;
 
+    /*
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $importe_abonado_tmp = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $estado_tmp = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $saldo_tmp = null;
+    */
+
     public function __construct()
     {
         $this->pagoCuotaDetalles = new ArrayCollection();
@@ -71,6 +82,12 @@ class Cuota
             return 'ABONADO';
         }
     }
+
+    public function getSaldoMagico(): string
+    {
+        $saldo = (float)$this->getImporte() - (float)$this->getImporteAbonadoMagico();
+        return strval($saldo);
+    }    
 
     public function __toString(): string
     {
@@ -212,4 +229,42 @@ class Cuota
 
         return $this;
     }
+
+    /*
+    public function getImporteAbonadoTmp(): ?string
+    {
+        return $this->importe_abonado_tmp;
+    }
+
+    public function setImporteAbonadoTmp(string $importe_abonado_tmp): static
+    {
+        $this->importe_abonado_tmp = $importe_abonado_tmp;
+
+        return $this;
+    }
+
+    public function getEstadoTmp(): ?string
+    {
+        return $this->estado_tmp;
+    }
+
+    public function setEstadoTmp(string $estado_tmp): static
+    {
+        $this->estado_tmp = $estado_tmp;
+
+        return $this;
+    }
+
+    public function getSaldoTmp(): ?string
+    {
+        return $this->saldo_tmp;
+    }
+
+    public function setSaldoTmp(string $saldo_tmp): static
+    {
+        $this->saldo_tmp = $saldo_tmp;
+
+        return $this;
+    }
+    */
 }

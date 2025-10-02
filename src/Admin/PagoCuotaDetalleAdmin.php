@@ -108,14 +108,31 @@ final class PagoCuotaDetalleAdmin extends AbstractAdmin
 
     public function prePersist($object): void
     {
-        $saldo = $object->getCuota()->getSaldo();
-        $object->setImporte($saldo);
+        //guardar con el valor por defecto
+        
+        $cuota = $object->getCuota();        
+        $saldo = $cuota->getSaldo();
+        $object->setImporte('0.00');
         $object->setRecargo('0.00');
     }
 
     public function preUpdate($object): void
     {    
+        $cuota = $object->getCuota();
 
+        $iam = $cuota->getImporteAbonadoMagico();
+        $esm = $cuota->getEstadoMagico();
+        $sam = $cuota->getSaldoMagico();
+
+        //$cuota->setImporteAbonadoTmp($iam);
+        //$cuota->setEstadoTmp($esm);        
+        //$cuota->setSaldoTmp($sam);
+        $cuota->setImporteAbonado($iam);
+        $cuota->setEstado($esm);        
+        $cuota->setSaldo($sam);        
+
+        $object->setCuota($cuota);
+        //$object->setEstado(true);
     }
 
     public function postRemove($object): void
@@ -124,10 +141,19 @@ final class PagoCuotaDetalleAdmin extends AbstractAdmin
     }
 
     public function actualizarCuota($object){
+        
         $cuota = $object->getCuota();
 
-        $cuota->setImporteAbonado($object->getCuota()->getImporteAbonadoMagico());
-        $cuota->setEstado($object->getCuota()->getEstadoMagico());
+        $iam = $cuota->getImporteAbonadoMagico();
+        $esm = $cuota->getEstadoMagico();
+        $sam = $cuota->getSaldoMagico();
+
+        //$cuota->setImporteAbonadoTmp($iam);
+        $cuota->setImporteAbonado($iam);
+        //$cuota->setEstadoTmp($esm);
+        $cuota->setEstado($esm);
+        //$cuota->setSaldoTmp($sam);
+        $cuota->setSaldo($sam);
 
         $em = $this->getModelManager()
                    ->getEntityManager($this->getClass());

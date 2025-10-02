@@ -54,6 +54,12 @@ class PagoCuotaDetalle
         //dd("finvalidate");
     }
 
+    public function __toString(): string
+    {
+
+        return strval($this->id);
+    }    
+
     public function getId(): ?int
     {
         return $this->id;

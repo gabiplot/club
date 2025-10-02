@@ -25,7 +25,9 @@ final class PagoCuotaAdmin extends AbstractAdmin
             ->add('id')
             ->add('fecha_pago')
             ->add('socio')
-            ->add('estado');
+            ->add('estado')
+            ->add('pagoCuotaDetalles.cuota.asignarcuota',null,['label'=>'Asignado En'])
+            ->add('pagoCuotaDetalles.cuota.asignarcuota.periodo',null,['label'=>'Periodo'])            
         ;
     }
 
@@ -33,10 +35,14 @@ final class PagoCuotaAdmin extends AbstractAdmin
     {
         dump($this);
         $list
-            ->add('id',null, ['header_class' =>'col-md-2 text-center'])
+            //->add('id',null, ['header_class' =>'col-md-2 text-center'])
             ->add('fecha_pago', null,['format' => 'd-m-Y', 'header_class' =>'col-md-2 text-center'])
             ->add('socio',null, ['header_class' =>'col-md-2 text-center'])
-            ->add('estado',null, ['label'=>'Finalizado','header_class' =>'col-md-2 text-center'])
+            ->add('TotalPagoCuota', null, ['label'=>'Total Abonado'])
+            ->add('cuotas')
+
+            //->add('total')
+            //->add('estado',null, ['label'=>'Finalizado','header_class' =>'col-md-2 text-center'])
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'header_class' =>'col-md-4 text-center',
                 'actions' => [

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 
 final class CuotaAdmin extends AbstractAdmin
 {
@@ -24,6 +25,7 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('saldo')
             ->add('asignarcuota.fecha')
             ->add('asignarcuota.periodo')
+            ->add('estado_tmp')
             //->add('periodo')
         ;
     }
@@ -34,12 +36,16 @@ final class CuotaAdmin extends AbstractAdmin
             ->add('socio')
             ->add('asignarcuota.fecha',null,['format' => 'd-m-Y'])
             ->add('asignarcuota.periodo')
-            ->add('importeAbonadoMagico')
-            ->add('estadomagico')
+            //->add('estadomagico')
+            //->add('estado_tmp')
             ->add('estado')
             ->add('importe')
+            //->add('importeAbonadoMagico')
+            //->add('importe_abonado_tmp')            
             ->add('importe_abonado')
             ->add('saldo',null,['label'=>'saldo a pagar'])
+            //->add('saldo_tmp')
+            //->add('saldomagico',null,['label'=>'saldo a pagar magico'])                    
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -52,31 +58,13 @@ final class CuotaAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
 
+
+
         $form
         ->tab('Cuota')
-        ->with('Cuota',['class'=>'col-md-4'])
+            ->with('Cuota',['class'=>'col-md-4'])
         ->add('socio')
-        ;
-
-        /*
-        if ($this->isCurrentRoute('edit')) 
-        {
-            $form
-            ->add('fecha',null,[
-                'widget'=>'single_text',
-                'required'=>true,
-            ]);
-        } 
-        else if ($this->isCurrentRoute('create'))
-        {
-            $form
-            ->add('fecha',null,[
-                'widget'=>'single_text',
-                'data'=>(new \DateTime('now')),
-                'required'=>true,
-            ]);
-        }
-        */
+        ;     
 
         $form   
             //->add('periodo')
@@ -116,4 +104,24 @@ final class CuotaAdmin extends AbstractAdmin
             //->add('periodo')
         ;
     }
+
+    /*
+    * MIS FUNCIONES
+    */
+
+    public function prePersist($object): void
+    {
+        $object->setImporteAbonado("0.00");
+        $object->setEstado("PENDIENTE");        
+    }
+    
+    public function preUpdate($object): void
+    {        
+        $importe_abonado = $object->getImporteAbonadoTmp() ?? "0.00";
+        $estado = $object->getEstadoTmp() ?? "PENDIENTE";
+
+        $object->setImporteAbonado($importe_abonado);
+        $object->setEstado($estado);
+    }
+
 }
