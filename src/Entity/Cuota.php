@@ -43,7 +43,7 @@ class Cuota
     /**
      * @var Collection<int, PagoCuotaDetalle>
      */
-    #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'cuota')]
+    #[ORM\OneToMany(targetEntity: PagoCuotaDetalle::class, mappedBy: 'cuota', cascade: ['remove'])]
     private Collection $pagoCuotaDetalles;
 
     /*
